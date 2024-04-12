@@ -3,7 +3,7 @@ import axios from 'axios';
 import AWS from '../config/awsConfig';
 import { Button, Image, View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 const ProfileScreen = () => {
@@ -13,11 +13,21 @@ const ProfileScreen = () => {
     const [imageUri, setImageUri] = useState('');
     const [userData, setUserData] = useState(null);
     const [awssrc, setAwsSrc] = useState('');
-    const number = 6666;
+    const navigation = useNavigation();
+    const route = useRoute();
+    const [Mnumber, setNumber] = useState();
 
+    useEffect(() => {
+        if (route.params?.data) {
+            console.log('here')
+            setNumber(route.params.data);
+        }
+    }, [route.params?.data]);
+    const number = Mnumber
     useEffect(() => {
         const fetchData = async () => {
             try {
+                console.log(`its this number ${number}`)
                 const response = await axios.get(`http://localhost:8080/api/profile/mobile/${number}`);
                 if (response.data === '') {
                     console.log("User Does Not Exist!");
@@ -39,7 +49,7 @@ const ProfileScreen = () => {
         return () => {
             setUserData(null);
         };
-    }, []);
+    }, [number]);
 
     const handleChoosePhoto = () => {
         const options = {
@@ -66,7 +76,8 @@ const ProfileScreen = () => {
             "name": name,
             "mobile": mobile,
             "email": email,
-            "photosrc": awssrc
+            //  awssrc
+            "photosrc": imageUri
         };
         try {
             const response = await axios.post("http://localhost:8080/api/user/profile", data);
@@ -77,6 +88,11 @@ const ProfileScreen = () => {
         } catch (error) {
             console.log("Error saving profile:", error);
         }
+        const navigateProfile = () => {
+            console.log("Navigation ran")
+            navigation.navigate("Profile", { data: mobile })
+        }
+        navigateProfile()
         // const s3 = new AWS.S3();
         // const fileUri = imageUri; // Replace with the actual path to your image file
 
@@ -97,7 +113,7 @@ const ProfileScreen = () => {
         // }
 
     };
-    const navigation = useNavigation();
+
     const navigatetohome = () => {
         navigation.navigate('Home');
     }
