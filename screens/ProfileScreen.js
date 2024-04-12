@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import AWS from '../config/awsConfig';
 import { Button, Image, View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +12,7 @@ const ProfileScreen = () => {
     const [mobile, setMobile] = useState('');
     const [imageUri, setImageUri] = useState('');
     const [userData, setUserData] = useState(null);
+    const [awssrc, setAwsSrc] = useState('');
     const number = 6666;
 
     useEffect(() => {
@@ -64,7 +66,7 @@ const ProfileScreen = () => {
             "name": name,
             "mobile": mobile,
             "email": email,
-            "photosrc": imageUri
+            "photosrc": awssrc
         };
         try {
             const response = await axios.post("http://localhost:8080/api/user/profile", data);
@@ -75,6 +77,24 @@ const ProfileScreen = () => {
         } catch (error) {
             console.log("Error saving profile:", error);
         }
+        // const s3 = new AWS.S3();
+        // const fileUri = imageUri; // Replace with the actual path to your image file
+
+        //   const params = {
+        //     Bucket: 'YOUR_S3_BUCKET_NAME',
+        //     Key: 'your_image_name.jpg', // Replace 'your_image_name.jpg' with a unique name for your image
+        //     Body: fileUri,
+        //     ACL: 'public-read',
+        //     ContentType: 'image/jpeg', // Adjust the content type as per your image type
+        //   };
+
+        // try {
+        //     const response = await s3.upload(params).promise();
+        //     console.log('Upload successful:', response.Location);
+        //     setAwsSrc(response.Location);
+        // } catch (error) {
+        //     console.log('Error uploading image:', error);
+        // }
 
     };
     const navigation = useNavigation();
