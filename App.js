@@ -10,7 +10,7 @@ const App = () => {
   const [imageUri, setImageUri] = useState('');
   const [userData, setUserData] = useState(null);
 
-  const number = 123456;
+  const number = 6666;
 
   useEffect(() => {
     const fetchData = async () => {
