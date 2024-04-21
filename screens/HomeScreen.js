@@ -34,7 +34,7 @@ const Registration = () => {
       "mobilephone": mobilePhone,
       "fullname": fullName
     }
-    const response = await axios.post("http://localhost:8080/api/registration", data);
+    const response = await axios.post("http://192.168.134.195:8080/api/registration", data);
   };
 
   return (
