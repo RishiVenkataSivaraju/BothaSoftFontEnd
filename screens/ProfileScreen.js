@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AWS from '../config/awsConfig';
 import { Button, Image, View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import imagepicker from 'react-native-image-picker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 
@@ -28,7 +28,7 @@ const ProfileScreen = () => {
         const fetchData = async () => {
             try {
                 console.log(`its this number ${number}`)
-                const response = await axios.get(`http://localhost:8080/api/profile/mobile/${number}`);
+                const response = await axios.get(`http://192.168.134.195:8080/api/profile/mobile/${number}`);
                 if (response.data === '') {
                     console.log("User Does Not Exist!");
                 } else {
@@ -57,7 +57,7 @@ const ProfileScreen = () => {
             quality: 1,
         };
 
-        launchImageLibrary(options, (response) => {
+        imagepicker.launchImageLibrary(options, (response) => {
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             } else if (response.errorCode) {
@@ -80,7 +80,7 @@ const ProfileScreen = () => {
             "photosrc": imageUri
         };
         try {
-            const response = await axios.post("http://localhost:8080/api/user/profile", data);
+            const response = await axios.post("http://192.168.134.195:8080/api/user/profile", data);
             console.log(response.data);
             console.log('Name:', name);
             console.log('Mobile:', mobile);
